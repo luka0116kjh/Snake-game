@@ -2,9 +2,9 @@ import pygame
 import random
 import sys
 
-WIDTH, HEIGHT = 600, 600
-CELL = 20
-FPS = 10
+WIDTH, HEIGHT = 600,600 # 화면 크기
+CELL = 20 # 셀크기(스네이크 크기)
+FPS = 8 # 스네이크 속도 
 
 BG = (0, 150, 0)
 SNAKE = (0, 0, 0)
@@ -16,6 +16,7 @@ def rand_pos():
         random.randrange(0, WIDTH, CELL),
         random.randrange(0, HEIGHT, CELL)
     )
+
 # 뱀의 초기 상태
 def main():
     pygame.init()
@@ -36,11 +37,12 @@ def main():
         (head[0] - 4 * CELL, head[1]),
     ]
 
-    dx, dy = (0, 0)   # 처음엔 움직이지 않음
-    food = rand_pos()
-    score = 0
+    dx, dy = (0, 0)   # 시작할때 작동 안함
+    food = rand_pos() # 사과 위치
+    score = 0 # 기본 점수
     game_over = False
 
+    # 게임 진행
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -66,7 +68,7 @@ def main():
                     elif event.key == pygame.K_RIGHT and dx != -CELL:
                         dx, dy = (CELL, 0)
 
-        # 게임 진행 중중
+        # 게임 진행 중
         if not game_over and (dx, dy) != (0, 0):
             head_x, head_y = snake[0]
             new_head = (head_x + dx, head_y + dy)
@@ -75,7 +77,7 @@ def main():
             if new_head[0] < 0 or new_head[0] >= WIDTH or new_head[1] < 0 or new_head[1] >= HEIGHT:
                 game_over = True
 
-            # 자기 몸 충돌
+            # 스네이크크 충돌
             elif new_head in snake:
                 game_over = True
 
@@ -97,14 +99,14 @@ def main():
 
         screen.fill(BG)
 
-        # 먹이
+        # 먹이 
         pygame.draw.rect(screen, FOOD, (food[0], food[1], CELL, CELL))
 
         # 뱀
         for x, y in snake:
             pygame.draw.rect(screen, SNAKE, (x, y, CELL, CELL))
 
-        # 점수
+        # 점수 표시
         screen.blit(font.render(f"Score: {score}", True, TEXT), (10, 10))
 
         # 게임오버 메시지
