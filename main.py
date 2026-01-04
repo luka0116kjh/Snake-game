@@ -15,7 +15,7 @@ FOOD = (200, 0, 0)
 TEXT = (200, 200, 200)
 
 WALL = (0, 120, 255)          # 벽 파란색
-WALL_THICK = 4                # 벽 두께(픽셀)
+WALL_THICK = 4                # 벽 두께
 
 # 랜덤 위치 선정
 def rand_pos():
@@ -25,7 +25,7 @@ def rand_pos():
     )
 
 def draw_walls(screen):
-    # ✅ 화면 테두리에 파란 벽 그리기(시각용)
+    # 화면 테두리에 파란 벽 그리기(시각용)
     pygame.draw.rect(screen, WALL, (0, 0, WIDTH, WALL_THICK))                      # 위
     pygame.draw.rect(screen, WALL, (0, HEIGHT - WALL_THICK, WIDTH, WALL_THICK))    # 아래
     pygame.draw.rect(screen, WALL, (0, 0, WALL_THICK, HEIGHT))                     # 왼
