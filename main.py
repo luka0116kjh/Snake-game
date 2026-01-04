@@ -7,15 +7,29 @@ CELL = 20 # 셀크기(스네이크 크기)
 FPS = 8 # 스네이크 속도 
 
 BG = (0, 150, 0)
-SNAKE = (0, 0, 0)
-FOOD = (200, 0, 0)
-TEXT = (255, 255, 255)
 
+SNAKE_HEAD = (255, 255, 255)  # ✅ 머리 흰색
+SNAKE_BODY = (0, 0, 0)        # 몸통 검정
+
+FOOD = (200, 0, 0)
+TEXT = (200, 200, 200)
+
+WALL = (0, 120, 255)          # ✅ 벽 파란색
+WALL_THICK = 4                # ✅ 벽 두께(픽셀)
+
+# 랜덤 위치 선정
 def rand_pos():
     return (
         random.randrange(0, WIDTH, CELL),
         random.randrange(0, HEIGHT, CELL)
     )
+
+def draw_walls(screen):
+    # ✅ 화면 테두리에 파란 벽 그리기(시각용)
+    pygame.draw.rect(screen, WALL, (0, 0, WIDTH, WALL_THICK))                      # 위
+    pygame.draw.rect(screen, WALL, (0, HEIGHT - WALL_THICK, WIDTH, WALL_THICK))    # 아래
+    pygame.draw.rect(screen, WALL, (0, 0, WALL_THICK, HEIGHT))                     # 왼
+    pygame.draw.rect(screen, WALL, (WIDTH - WALL_THICK, 0, WALL_THICK, HEIGHT))    # 오
 
 # 뱀의 초기 상태
 def main():
@@ -25,24 +39,22 @@ def main():
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("consolas", 24)
 
-    # 뱀상태 (머리 + 꼬리 4개)
     head = (WIDTH // 2, HEIGHT // 2)
 
-    # 꼬리 4개를 왼쪽으로 붙여서 시작
     snake = [
         head,
         (head[0] - CELL, head[1]),
         (head[0] - 2 * CELL, head[1]),
         (head[0] - 3 * CELL, head[1]),
         (head[0] - 4 * CELL, head[1]),
+        (head[0] - 5 * CELL, head[1]),
     ]
 
-    dx, dy = (0, 0)   # 시작할때 작동 안함
-    food = rand_pos() # 사과 위치
-    score = 0 # 기본 점수
+    dx, dy = (0, 0)
+    food = rand_pos()
+    score = 0
     game_over = False
 
-    # 게임 진행
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -53,12 +65,11 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if game_over:
                     if event.key == pygame.K_r:
-                        main()  # 재시작
+                        main()
                     if event.key in (pygame.K_q, pygame.K_ESCAPE):
                         pygame.quit()
                         sys.exit()
                 else:
-                    # 방향키
                     if event.key == pygame.K_UP and dy != CELL:
                         dx, dy = (0, -CELL)
                     elif event.key == pygame.K_DOWN and dy != -CELL:
@@ -68,48 +79,43 @@ def main():
                     elif event.key == pygame.K_RIGHT and dx != -CELL:
                         dx, dy = (CELL, 0)
 
-        # 게임 진행 중
         if not game_over and (dx, dy) != (0, 0):
             head_x, head_y = snake[0]
             new_head = (head_x + dx, head_y + dy)
 
-            # 벽 충돌
+            # 벽 충돌(기존 그대로: 화면 밖으로 나가면 게임오버)
             if new_head[0] < 0 or new_head[0] >= WIDTH or new_head[1] < 0 or new_head[1] >= HEIGHT:
                 game_over = True
 
-            # 스네이크크 충돌
             elif new_head in snake:
                 game_over = True
 
             else:
-                # 머리 추가
                 snake.insert(0, new_head)
 
-                # 먹이 먹으면 길이 유지
                 if new_head == food:
                     score += 1
-                    # 먹이가 뱀 위에 생성되지 않게
                     while True:
                         food = rand_pos()
                         if food not in snake:
                             break
                 else:
-                    # 안 먹었으면 꼬리 제거
                     snake.pop()
 
         screen.fill(BG)
 
-        # 먹이 
+        # 벽(테두리) 그리기
+        draw_walls(screen)
+
         pygame.draw.rect(screen, FOOD, (food[0], food[1], CELL, CELL))
 
-        # 뱀
-        for x, y in snake:
-            pygame.draw.rect(screen, SNAKE, (x, y, CELL, CELL))
+        # 뱀: 첫 칸(머리)은 흰색, 나머지는 검정
+        for i, (x, y) in enumerate(snake):
+            color = SNAKE_HEAD if i == 0 else SNAKE_BODY
+            pygame.draw.rect(screen, color, (x, y, CELL, CELL))
 
-        # 점수 표시
         screen.blit(font.render(f"Score: {score}", True, TEXT), (10, 10))
 
-        # 게임오버 메시지
         if game_over:
             screen.blit(font.render("GAME OVER  (R: restart, Q: quit)", True, TEXT), (60, HEIGHT // 2))
 
