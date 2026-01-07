@@ -25,7 +25,7 @@ def rand_pos():
     )
 
 def draw_walls(screen):
-    # 화면 테두리에 파란 벽 그리기(시각용)
+    # 화면 테두리에 파란 벽 그리기
     pygame.draw.rect(screen, WALL, (0, 0, WIDTH, WALL_THICK))                      # 위
     pygame.draw.rect(screen, WALL, (0, HEIGHT - WALL_THICK, WIDTH, WALL_THICK))    # 아래
     pygame.draw.rect(screen, WALL, (0, 0, WALL_THICK, HEIGHT))                     # 왼
@@ -104,12 +104,12 @@ def main():
 
         screen.fill(BG)
 
-        # 벽(테두리) 그리기
+        # 벽 표시
         draw_walls(screen)
 
         pygame.draw.rect(screen, FOOD, (food[0], food[1], CELL, CELL))
 
-        # 뱀: 첫 칸(머리)은 흰색, 나머지는 검정
+        # 뱀: 머리 흰색, 나머지 검정
         for i, (x, y) in enumerate(snake):
             color = SNAKE_HEAD if i == 0 else SNAKE_BODY
             pygame.draw.rect(screen, color, (x, y, CELL, CELL))
