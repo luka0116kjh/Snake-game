@@ -14,6 +14,19 @@ TEXT = (200, 200, 200)
 WALL = (0, 120, 255) 
 WALL_THICK = 4 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+FOOD = (200, 0, 0) # 사과 크기
+TEXT = (200, 200, 200) #글자 크기
+
+WALL = (0, 120, 255)          # 벽 파란색
+WALL_THICK = 4                # 벽 두께
+
+# 랜덤 위치 선정
+>>>>>>> 8057b09 (luka: 코드 일정부분 수정정)
+>>>>>>> ce28048c654914bf5d10dea27d057fe109a8c8e1
 def rand_pos():
     return (
         random.randrange(0, WIDTH, CELL),
