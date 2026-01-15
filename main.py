@@ -45,7 +45,7 @@ def main():
         (head[0] - 5 * CELL, head[1]),
     ]
 
-    dx, dy = (CELL, 0) # 처음에 오른쪽으로 움직이도록 설정
+    dx, dy = (0, 0) # 초기 이동 방향 없음
     food = rand_pos()
     score = 0
     game_over = False
@@ -92,7 +92,13 @@ def main():
                     score += 1
                     #[핵심 수정 부분]
                     snake.reverse()    # 1. 뱀의 몸통 순서를 뒤집음 (꼬리가 머리가 됨)
-                    dx, dy = -dx, -dy  # 2. 이동 방향을 반대로 반전
+                    # 2. 새로운 이동 방향을 꼬리에서 머리 방향으로 설정
+                    new_head_x, new_head_y = snake[0]
+                    neck_x, neck_y = snake[1]
+                    # 새로운 이동 방향을 설정
+                    dx = new_head_x - neck_x
+                    dy = new_head_y - neck_y
+
                     while True:
                         food = rand_pos()
                         if food not in snake:
