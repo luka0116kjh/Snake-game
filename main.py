@@ -24,21 +24,21 @@ WALL_THICK = 4                # 벽 두께
 def rand_pos():
     return (
         random.randrange(0, WIDTH, CELL),
-        random.randrange(0, HEIGHT, CELL)
+        random.randrange(0, HEIGHT, CELL) 
     )
 
 def draw_walls(screen):
-    pygame.draw.rect(screen, WALL, (0, 0, WIDTH, WALL_THICK))
+    pygame.draw.rect(screen, WALL, (0, 0, WIDTH, WALL_THICK)) 
     pygame.draw.rect(screen, WALL, (0, HEIGHT - WALL_THICK, WIDTH, WALL_THICK))
     pygame.draw.rect(screen, WALL, (0, 0, WALL_THICK, HEIGHT))
     pygame.draw.rect(screen, WALL, (WIDTH - WALL_THICK, 0, WALL_THICK, HEIGHT))
 
 def main():
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Reverse Snake Game")
-    clock = pygame.time.Clock()
-    font = pygame.font.SysFont("consolas", 24) 
+    pygame.init() 
+    screen = pygame.display.set_mode((WIDTH, HEIGHT)) 
+    pygame.display.set_caption("Go Snake Game") 
+    clock = pygame.time.Clock() 
+    font = pygame.font.SysFont("consolas", 24)  
 
     head = (WIDTH // 2, HEIGHT // 2)
 
@@ -58,8 +58,8 @@ def main():
     game_over = False
 
     while True:
-        clock.tick(FPS)
-        for event in pygame.event.get():
+        clock.tick(FPS) 
+        for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
