@@ -17,14 +17,12 @@ WALL = (0, 120, 255)          # 벽(파랑)
 WALL_THICK = 4                # 벽 두께(px)
 
 def rand_pos():
-    """격자(CELL) 단위로 랜덤 위치를 반환."""
     return (
         random.randrange(0, WIDTH, CELL),
         random.randrange(0, HEIGHT, CELL)
     )
 
 def draw_walls(screen):
-    """화면 테두리에 벽을 그린다."""
     pygame.draw.rect(screen, WALL, (0, 0, WIDTH, WALL_THICK))                        # 위
     pygame.draw.rect(screen, WALL, (0, HEIGHT - WALL_THICK, WIDTH, WALL_THICK))      # 아래
     pygame.draw.rect(screen, WALL, (0, 0, WALL_THICK, HEIGHT))                       # 왼쪽
@@ -155,5 +153,5 @@ def main():
 
         pygame.display.flip()
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": 
+    main() 
