@@ -17,8 +17,8 @@ WALL_THICK = 4
 FOOD = (200, 0, 0) # 사과 크기
 TEXT = (200, 200, 200) #글자 크기
 
-WALL = (0, 120, 255)          # 벽 파란색
-WALL_THICK = 4                # 벽 두께
+WALL = (0, 120, 255) # 벽 파란색
+WALL_THICK = 4 # 벽 두께
 
 # 랜덤 위치 선정
 def rand_pos():
@@ -52,14 +52,16 @@ def main():
         (head[0] - 5 * CELL, head[1]),
     ]
 
-    dx, dy = (0, 0) # 초기 이동 방향 없음
+    dx, dy = (0, 0) # 초기 이동
     food = rand_pos()
     score = 0
+    food_eaten = 0
+    speed = FPS
     game_over = False
 
     while True:
-        clock.tick(FPS) 
-        for event in pygame.event.get(): 
+        clock.tick(speed)
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -72,7 +74,7 @@ def main():
                         pygame.quit()
                         sys.exit()
                 else:
-                    # 방향키 조작 (반대 방향 이동 제한)
+                    # 방향키 조작
                     if event.key == pygame.K_UP and dy != CELL:
                         dx, dy = (0, -CELL)
                     elif event.key == pygame.K_DOWN and dy != -CELL:
@@ -97,8 +99,11 @@ def main():
 
                 if new_head == food:
                     score += 1
+                    food_eaten += 1
+                    if food_eaten % 5 == 0:
+                        speed += 1
                     #[핵심 수정 부분]
-                    snake.reverse()    # 1. 뱀의 몸통 순서를 뒤집음 (꼬리가 머리가 됨)
+                    snake.reverse() # 1. 뱀의 몸통 순서를 뒤집음 (꼬리가 머리가 됨)
                     # 2. 새로운 이동 방향을 꼬리에서 머리 방향으로 설정
                     new_head_x, new_head_y = snake[0]
                     neck_x, neck_y = snake[1]
