@@ -132,7 +132,7 @@ def main():
                     # 사과를 안 먹었으면 꼬리 한 칸 제거(길이 유지)
                     snake.pop()
 
-        # --- 그리기 ---
+        # 화면
         screen.fill(BG)
         draw_walls(screen)
 
