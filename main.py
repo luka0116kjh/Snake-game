@@ -46,7 +46,7 @@ def main():
         (head[0] - 5 * CELL, head[1]),
     ]
 
-    #
+    
     dx, dy = (0, 0)         # 이동 방향(처음엔 정지)
     food = rand_pos()       # 사과 위치
     score = 0
