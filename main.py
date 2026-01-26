@@ -46,7 +46,6 @@ def main():
         (head[0] - 5 * CELL, head[1]),
     ]
 
-    
     dx, dy = (0, 0)         # 이동 방향(처음엔 정지)
     food = rand_pos()       # 사과 위치
     score = 0
@@ -55,6 +54,10 @@ def main():
     total_cells = (WIDTH // CELL) * (HEIGHT // CELL)
     game_over = False
     game_won = False
+
+    # 시간 제한 관련
+    last_food_ticks = pygame.time.get_ticks() 
+    FOOD_LIMIT_MS = 30000
 
     # 메인 게임 루프
     while True:
@@ -105,6 +108,8 @@ def main():
                 if new_head == food:
                     score += 1
                     food_eaten += 1
+                    # 사과를 먹으면 타이머 리셋
+                    last_food_ticks = pygame.time.get_ticks()
 
                     # 5개마다 속도 증가
                     if food_eaten % 5 == 0:
@@ -130,6 +135,12 @@ def main():
                     # 사과를 안 먹었으면 꼬리 한 칸 제거(길이 유지)
                     snake.pop()
 
+        # [특수 규칙] 30초 시간 초과 체크
+        if not game_over and not game_won and (dx, dy) != (0, 0):
+            current_time = pygame.time.get_ticks()
+            if current_time - last_food_ticks > FOOD_LIMIT_MS:
+                game_over = True
+
         # 화면
         screen.fill(BG)
         draw_walls(screen)
@@ -142,16 +153,22 @@ def main():
             color = SNAKE_HEAD if i == 0 else SNAKE_BODY
             pygame.draw.rect(screen, color, (x, y, CELL, CELL))
 
-        # 점수
+        # 점수 표시
         screen.blit(font.render(f"Score: {score}", True, TEXT), (15, 15))
+        
+        # 남은 시간 표시
+        if not game_over and not game_won and (dx, dy) != (0, 0):
+            time_left = max(0, (FOOD_LIMIT_MS - (pygame.time.get_ticks() - last_food_ticks)) // 1000)
+            timer_text = font.render(f"Timer: {time_left}s", True, (255, 0, 0)) # 빨강 텍스트
+            screen.blit(timer_text, (15, 45))
 
         # 안내 문구
         if game_over:
             screen.blit(font.render("GAME OVER (R: restart, Q: quit)", True, TEXT), (60, HEIGHT // 2))
         if game_won:
-            screen.blit(font.render("YOU WIN! (R: restart, Q: quit)", True, TEXT), (70, HEIGHT // 2))
+            screen.blit(font.render("이걸 이기네.. (R: restart, Q: quit)", True, TEXT), (70, HEIGHT // 2))
 
         pygame.display.flip()
 
 if __name__ == "__main__": 
-    main() 
+    main()
