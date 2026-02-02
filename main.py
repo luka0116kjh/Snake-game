@@ -64,7 +64,7 @@ def main():
     game_won = False
 
     # 시간 제한 관련
-    last_food_ticks = pygame.time.get_ticks() 
+    last_food_ticks = None  # None으로 시작 (첫 이동 시 타이머 시작)
     FOOD_LIMIT_MS = 30000
 
     # 메인 게임 루프
@@ -98,6 +98,10 @@ def main():
 
         # 이동/충돌 처리
         if not game_over and not game_won and (dx, dy) != (0, 0):
+            # 첫 이동 시 타이머 시작
+            if last_food_ticks is None:
+                last_food_ticks = pygame.time.get_ticks()
+            
             head_x, head_y = snake[0]
             new_head = (head_x + dx, head_y + dy)
 
@@ -144,7 +148,7 @@ def main():
                     snake.pop()
 
         # [특수 규칙] 30초 시간 초과 체크
-        if not game_over and not game_won and (dx, dy) != (0, 0):
+        if not game_over and not game_won and last_food_ticks is not None:
             current_time = pygame.time.get_ticks()
             if current_time - last_food_ticks > FOOD_LIMIT_MS:
                 game_over = True
@@ -166,9 +170,14 @@ def main():
         # 점수 표시
         screen.blit(font.render(f"Score: {score}", True, TEXT), (15, 15))
         
-        # 남은 시간 표시
-        if not game_over and not game_won and (dx, dy) != (0, 0):
-            time_left = max(0, (FOOD_LIMIT_MS - (pygame.time.get_ticks() - last_food_ticks)) // 1000)
+        # 남은 시간 표시 (게임 시작 전부터 표시)
+        if not game_over and not game_won:
+            if last_food_ticks is None:
+                # 게임 시작 전: 30초 표시
+                time_left = FOOD_LIMIT_MS // 1000
+            else:
+                # 게임 진행 중: 실제 남은 시간 계산
+                time_left = max(0, (FOOD_LIMIT_MS - (pygame.time.get_ticks() - last_food_ticks)) // 1000)
             timer_text = font.render(f"Timer: {time_left}s", True, (255, 0, 0)) # 빨강 텍스트
             screen.blit(timer_text, (15, 45))
 
