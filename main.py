@@ -9,6 +9,7 @@ FPS = 8                    # 기본 속도
 
 # 색상 설정
 BG = (0, 150, 0)           # 배경(초록)
+BG_PATTERN = (0, 170, 0)   # 배경 무늬용 연한 초록
 SNAKE_HEAD = (255, 255, 255)  # 뱀 머리(흰색)
 SNAKE_BODY = (0, 0, 0)        # 뱀 몸통(검정)
 FOOD = (200, 0, 0)            # 사과(빨강)
@@ -27,6 +28,13 @@ def draw_walls(screen):
     pygame.draw.rect(screen, WALL, (0, HEIGHT - WALL_THICK, WIDTH, WALL_THICK))      # 아래
     pygame.draw.rect(screen, WALL, (0, 0, WALL_THICK, HEIGHT))                       # 왼쪽
     pygame.draw.rect(screen, WALL, (WIDTH - WALL_THICK, 0, WALL_THICK, HEIGHT))      # 오른쪽
+
+def draw_background_pattern(screen):
+    for x in range(0, WIDTH, CELL):
+        for y in range(0, HEIGHT, CELL):
+            if (x // CELL + y // CELL) % 2 == 0:
+                pygame.draw.rect(screen, BG_PATTERN, (x, y, CELL, CELL))
+
 
 def main():
     pygame.init()
@@ -79,14 +87,14 @@ def main():
                         sys.exit()
                 else:
                     # 방향키 입력(반대 방향 즉시 전환 방지)
-                    if event.key == pygame.K_UP and dy != CELL:
-                        dx, dy = (0, -CELL)
-                    elif event.key == pygame.K_DOWN and dy != -CELL:
-                        dx, dy = (0, CELL)
-                    elif event.key == pygame.K_LEFT and dx != CELL:
-                        dx, dy = (-CELL, 0)
-                    elif event.key == pygame.K_RIGHT and dx != -CELL:
-                        dx, dy = (CELL, 0)
+                    if event.key == pygame.K_UP and dy == 0:
+                        dx, dy = 0, -CELL
+                    elif event.key == pygame.K_DOWN and dy == 0:
+                        dx, dy = 0, CELL
+                    elif event.key == pygame.K_LEFT and dx == 0:
+                        dx, dy = -CELL, 0
+                    elif event.key == pygame.K_RIGHT and dx == 0:
+                        dx, dy = CELL, 0
 
         # 이동/충돌 처리
         if not game_over and not game_won and (dx, dy) != (0, 0):
@@ -143,7 +151,9 @@ def main():
 
         # 화면
         screen.fill(BG)
-        draw_walls(screen)
+        draw_background_pattern(screen)  # 배경 무늬
+        draw_walls(screen)               # 벽은 제일 위
+
 
         # 사과
         pygame.draw.rect(screen, FOOD, (food[0], food[1], CELL, CELL))
