@@ -16,6 +16,7 @@ Python + Pygame으로 만든 스네이크 게임입니다.
   - (버그 수정됨) 재시작 시 메모리 누수 없이 무한 플레이 가능
 
 ## Run
+```bash
 pip install pygame
 python main.py
 ```
