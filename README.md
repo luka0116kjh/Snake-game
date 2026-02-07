@@ -18,6 +18,7 @@ Python + Pygame으로 만든 스네이크 게임입니다.
 ## Run
 pip install pygame
 python main.py
+```
 
 ## Recent Updates
 - **[Fix] 재귀 호출 버그 수정:**  
